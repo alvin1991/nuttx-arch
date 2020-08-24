@@ -1,0 +1,33 @@
+#
+# For a description of the syntax of this configuration file,
+# see the file kconfig-language.txt in the NuttX tools repository.
+#
+
+config MYPROJECT_EXAMPLE_ADIS16488A
+	bool "adis16488a example"
+	default n
+	---help---
+		Enable the \"adis16488a example\" project
+
+if MYPROJECT_EXAMPLE_ADIS16488A
+
+config MYPROJECT_EXAMPLE_ADIS16488A_PROGNAME
+	string "adis16488a example"
+	default "adis16488a example"
+	depends on BUILD_KERNEL
+	---help---
+		This is the name of the program that will be use when the NSH ELF
+		program is installed.
+
+config MYPROJECT_EXAMPLE_ADIS16488A_PRIORITY
+	int "adis16488a example priority"
+	default 100
+
+config MYPROJECT_EXAMPLE_ADIS16488A_STACKSIZE
+	int "adis16488a example stack size"
+	default 2048
+
+endif
+
+
+

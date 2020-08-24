@@ -1,0 +1,72 @@
+#!/bin/bash
+
+TMP_PATH=`readlink "../../nuttx/arch/arm/src/board"`
+TARGETPATH=${TMP_PATH/%src/include}
+LOCALPATH="./romfs/init.d"
+RCSFILE=${LOCALPATH}'/rcS'
+
+#check input parameter
+if [ -n "$1" ];then
+	RCSFILE=${LOCALPATH}'/'"$1"
+	if [ -f ${RCSFILE} ];then
+		echo "found $1"
+	else
+		echo "can not found $1"
+		exit 0
+	fi
+else
+	echo " Please input script file name.eg:rcS_imu/rcS_core"
+	exit 0
+fi
+
+#check files path
+if [ ! -d ${TARGETPATH} ];then
+	echo "[FAILED] Check files path:"
+	echo "		No target path,check nuttx configrations."
+	mkdir "${LOCALPATH}"	
+fi
+
+if [ ! -d ${LOCALPATH} ];then
+	mkdir ${LOCALPATH}
+	touch ${RCSFILE}
+fi
+
+echo "[OK] Check files path. "
+
+#remove old romfs.img file
+if [ -f "romfs.img" ];then
+	rm -f "romfs.img"
+	if [ -f "romfs.img" ];then
+		echo "[OK] remove old [romfs.img] file."
+	else
+		echo "[OK] remove old [romfs.img] file."
+	fi
+fi
+
+#remove old nsh_romfsimg.h file 
+if [ -f ${TARGETPATH}'/nsh_romfsimg.h' ];then
+	rm -f ${TARGETPATH}'/nsh_romfsimg.h'
+	echo "[OK] remove old [nsh_romfsimg.h] file."
+fi
+
+#create new romfs.img file
+genromfs -f romfs.img -d romfs -v -V "romfs"
+
+if [ -f "romfs.img" ];then
+	echo "[OK] creat new [romfs.img] file."
+else
+	echo "[FAILED] creat new [romfs.img] file."
+
+fi
+
+#create new nsh_romfsimg.h file
+xxd -i romfs.img ${TARGETPATH}'/nsh_romfsimg.h'
+
+if [ -f ${TARGETPATH}'/nsh_romfsimg.h' ];then
+	echo "[OK] creat new [nsh_romfsimg.h] file."
+	rm -f "./romfs.img"
+else
+	echo "[FAILED] creat new [nsh_romfsimg.h] file."
+fi
+
+exit 0

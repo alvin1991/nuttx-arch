@@ -1,0 +1,7 @@
+#!/bin/sh
+
+TARGETPATH=`readlink "../../nuttx/arch/arm/src/board"`
+echo $TARGETPATH
+echo ${TARGETPATH/%src/include}
+
+

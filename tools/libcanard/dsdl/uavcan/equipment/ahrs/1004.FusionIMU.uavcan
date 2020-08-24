@@ -1,0 +1,30 @@
+#
+# Fusion IMU data.
+#
+# THIS DEFINITION MAY BE CHANGED IN A NON-BACKWARD-COMPATIBLE WAY IN THE FUTURE.
+#
+
+#
+# State of fusion.
+# The state of fusion in the body frame, the status are ordered as follows:
+#   0x00, 
+#   0x01, 
+#
+int8 state                 # Status of fusion
+#
+# Angular fusion in radian/second.
+# The samples are represented in the body frame, the axes are ordered as follows:
+#   1. angular velocity around X (roll rate)
+#   2. angular velocity around Y (pitch rate)
+#   3. angular velocity around Z (yaw rate)
+#
+float32 fusion_roll		    # Integrated fusion, radian/second
+float32 fusion_pitch		# Integrated fusion, radian/second
+float32 fusion_yaw	        # Integrated fusion, radian/second
+
+#
+# quaternion.
+# The quaternion are represented in the body frame.
+#
+float32[4] q           # Integrated quaternion
+

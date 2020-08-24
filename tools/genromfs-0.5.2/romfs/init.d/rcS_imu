@@ -1,0 +1,98 @@
+
+echo 
+echo "The script of start up."
+echo "this is the fppa project."
+echo 
+
+
+#Start the ORB (first app to start)
+#All applications are dependent.
+
+if uorb start
+then
+	echo "[OK] uorb start"
+else
+	echo "[FAILED] uorb start"
+	exit
+fi
+
+
+
+#
+# Start the lower sensor measurement.
+# link gps sensor temperature sensor and so on.
+# base on IIC(I2C) SPI or other.
+ low_sensor_service -gps 1
+ if low_sensor_service start 
+ then
+ 	echo "[OK] low_sensor_service start"
+ else
+ 	echo "[FAILED] low_sensor_service start "
+	exit
+ fi
+ 
+ 
+ #FG-70C fiber gyro
+ 
+ if gyrodecode start
+ then
+ 	echo "[OK] gyrodecode start"
+ else
+ 	echo "[FAILED] gyrodecode start"
+ 	exit
+ fi
+ 
+
+
+
+
+# Start the attitude measurement base on IMU.
+# base on gyroscope accelerometer and angle of yaw.
+#
+
+
+ if imu start eskf157 rtk
+ then
+ 	echo "[OK] imu start eskf157 rtk"
+ else
+ 	echo "[FAILED] imu start eskf157 rtk"
+ 	exit
+ fi
+
+
+
+# Start the uavcan_service service.
+# All applications are dependent.
+
+
+ if uavcan_service start imu
+ then
+ 	echo "[OK] uavcan_service start imu"
+ else
+ 	echo "[FAILED] uavcan_service start! imu"
+ 	exit
+ fi
+
+# if beacon_receiver start
+# then
+# 	echo "[OK] beacon_receiver start"
+# else
+# 	echo "[FAILED] beacon_receiver start"
+# 	exit
+# fi
+
+
+if mavlink_service start udp 14550
+then
+	echo "[OK] mavlink_service start udp 14550"
+else
+	echo "[FAILED] mavlink_service start udp 14550!"
+	exit
+fi
+
+
+
+
+
+
+

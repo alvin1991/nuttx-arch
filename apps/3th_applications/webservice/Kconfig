@@ -1,0 +1,33 @@
+#
+# For a description of the syntax of this configuration file,
+# see the file kconfig-language.txt in the NuttX tools repository.
+#
+
+config APP_WEBSERVICE
+	bool "\"webservice\" Application"
+	default n
+	---help---
+		Enable the webservice application
+
+if APP_WEBSERVICE
+
+menu "web(http) service"
+
+config APP_WEBSERVICE_PROGNAME
+	string "Program name"
+	default "webservice"
+	---help---
+		This is the name of the program that will be use when the NSH ELF
+		program is installed.
+
+config APP_WEBSERVICE_PRIORITY
+	int "Task priority"
+	default 100
+
+config APP_WEBSERVICE_STACKSIZE
+	int "Stack size"
+	default 2048
+
+endmenu # web(http) service
+
+endif

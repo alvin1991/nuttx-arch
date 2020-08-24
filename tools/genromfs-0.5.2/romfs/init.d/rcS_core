@@ -1,0 +1,75 @@
+
+echo 
+echo " ___ ___ ___  _     ___         _"
+echo "| __| _ \\ _ \\/_\\   / __|_  _ __| |_ ___ _ __"
+echo "| _||  _/  _/ _ \\  \\__ \\ || (_-<  _/ -_) '  \\"
+echo "|_| |_| |_|/_/ \\_\\ |___/\\_, /__/\\__\\___|_|_|_|"
+echo "                        |__/"
+echo "Copyright (C) 2020 Chengdu Satcomm Co.,Ltd."
+echo "OS Version:7.26 "
+echo "HW Version:2.0 "
+echo 
+echo "Start-up the fppa system..."
+
+
+#Start the ORB (first app to start)
+#All applications are dependent.
+
+if uorb start
+then
+	echo "[OK] uorb start"
+else
+	echo "[FAILED] uorb start"
+	exit
+fi
+
+low_sensor_service -led 1
+low_sensor_service -buzz 1
+if low_sensor_service start 
+then
+	echo "[OK] low_sensor_service start"
+else
+	echo "[FAILED] low_sensor_service start "
+	exit
+fi
+
+# Mount spi flash
+if mount -t smartfs /dev/smart0 /fs/norflash
+then
+	echo "[OK] mount norflash"
+	set m_norflash 1
+	set FRC /fs/norflash/etc/rcS.txt
+else
+	echo "[ERROR] norflash mount failed"
+	set m_norflash 0
+fi
+
+# Mount sd card
+if mount -t vfat /dev/mmcsd0 /fs/microsd
+then
+	echo "[OK] mount sdcard"
+	set m_microsd 1
+	set FRC /fs/microsd/etc/rcS.txt
+else
+	echo "[ERROR] sdcard mount failed"
+	set m_microsd 0
+fi
+
+# Check the storage is mounted?
+if [ $m_norflash -eq 0 -a $m_microsd -eq 0 ]
+then
+	low_sensor_service ledm-lerr
+	exit
+else
+fi
+
+# Check if the file is exist,if exist,do it
+if [ -f $FRC ]
+then
+    echo "[INFO]  Executing script: $FRC"
+    sh $FRC
+else
+	echo "[FAILED]  file not found: $FRC"
+fi
+unset FRC
+

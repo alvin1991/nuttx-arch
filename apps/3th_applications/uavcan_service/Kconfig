@@ -1,0 +1,62 @@
+#
+# For a description of the syntax of this configuration file,
+# see the file kconfig-language.txt in the NuttX tools repository.
+#
+
+config APP_UAVCAN_SERVICE
+	bool "\"uavcan_service\" Application"
+	default n
+	---help---
+		Enable the uavcan_service application
+
+if APP_UAVCAN_SERVICE
+
+menu "uavcan service"
+
+config APP_UAVCAN_SERVICE_PROGNAME
+	string "Program name"
+	default "uavcan_service"
+	---help---
+		This is the name of the program that will be use when the NSH ELF
+		program is installed.
+
+config APP_UAVCAN_SERVICE_PRIORITY
+	int "Task priority"
+	default 100
+
+config APP_UAVCAN_SERVICE_STACKSIZE
+	int "Stack size"
+	default 2048
+	
+
+config UAVCAN_NODE_RTK_GPS
+	bool "RTK-GPS node"
+	default 1
+	---help---
+		Enable the RTK-GPS node
+
+if UAVCAN_NODE_RTK_GPS
+config UAVCAN_NODE_RTK_GPS_VIA_UDP
+	bool "repeated via udp"
+	default 1
+	---help---
+		if yes,mavlink will repeat this message via udp.
+endif #UAVCAN_NODE_RTK_GPS
+
+config UAVCAN_NODE_IMU
+	bool "IMU node"
+	default 1
+	---help---
+		Enable the IMU node
+		
+if UAVCAN_NODE_IMU
+config UAVCAN_NODE_IMU_VIA_UDP
+	bool "repeated via udp"
+	default 1
+	---help---
+		if yes,mavlink will repeat this message via udp.
+endif #UAVCAN_NODE_IMU		
+		
+endmenu # uavcan service
+
+endif

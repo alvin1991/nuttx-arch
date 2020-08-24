@@ -1,0 +1,22 @@
+#
+# For a description of the syntax of this configuration file,
+# see the file kconfig-language.txt in the NuttX tools repository.
+#
+
+config EXAMPLES_ACDC_POWER
+	bool "ACDC power example"
+	default n
+	---help---
+		Enable the ACDC power example
+
+if EXAMPLES_ACDC_POWER
+
+config EXAMPLES_ACDC_POWER_PRIORITY
+	int "ACDC power example task priority"
+	default 100
+
+config EXAMPLES_ACDC_POWER_STACKSIZE
+	int "ACDC power example stack size"
+	default 1024
+
+endif

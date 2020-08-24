@@ -1,0 +1,12 @@
+#
+# GPS low priority auxiliary info.
+#
+
+float32 longitude                     # longitude
+float32 latitude                      # latitude
+float32 altitude                      # altitude
+int32   utc                           # utc time
+
+uint8 sats_visible                    # All visible sats of all available GNSS (e.g. GPS, GLONASS, etc)
+uint8 sats_state                      # All used sats of all available GPS
+uint8 fix_type                        # GPS fix type(1=GPS fix,2=DGPS fix,3=PPS fix,4=Real time Kinematic,5=Float RTK,6=estimated,7=Manual input,8=Simulation)
